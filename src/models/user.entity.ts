@@ -1,6 +1,10 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm'
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm'
 import Token from './token.entity'
-import Task from './task.entity'
+import Bloodcenter from './bloodcenter.entity'
+import Free_Date from './freeDate.entity'
+import DateHour from './dateHour.entity'
+import Custom_Question from './customQuestion.entity'
+import Role from './role.entity'
 
 @Entity()
 export default class User extends BaseEntity {
@@ -11,13 +15,22 @@ export default class User extends BaseEntity {
   name!: string
 
   @Column()
-  email!: string
-
-  @Column()
   password!: string
 
-  @OneToMany(() => Task, task => task.user)
-  tasks!: Task[]
+  @ManyToOne(() => Role, role => role.user)
+  role!: Role
+
+  @ManyToOne(() => Bloodcenter, bloodcenter => bloodcenter.user)
+  bloodcenter?: Bloodcenter;
+
+  @OneToMany(() => Free_Date, free_date => free_date.user)
+  free_date!:Free_Date
+
+  @OneToMany(() => DateHour, date_hour => date_hour.user)
+  date_hour!:DateHour
+
+  @OneToMany(()=> Custom_Question, custom_question => custom_question.user)
+  custom_question!: Custom_Question[]
 
   @OneToMany(() => Token, token => token.user)
 tokens!: Token[]

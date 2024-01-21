@@ -1,10 +1,10 @@
 import { Router } from 'express'
-import taskRoutes from './task/task.routes'
 import authRoutes from './auth/auth.routes'
+import bloodcenterRoutes from './bloodcenter/bloodcenter.routes'
 
 const routes = Router()
 
-routes.use('/task', taskRoutes)
+routes.use('/bloodcenter', bloodcenterRoutes)
 routes.use('/auth', authRoutes)
 
 export default routes
