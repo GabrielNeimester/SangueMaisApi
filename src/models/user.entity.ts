@@ -4,7 +4,7 @@ import Bloodcenter from './bloodcenter.entity'
 import Free_Date from './freeDate.entity'
 import DateHour from './dateHour.entity'
 import Custom_Question from './customQuestion.entity'
-import Role from './role.entity'
+
 
 @Entity()
 export default class User extends BaseEntity {
@@ -17,8 +17,8 @@ export default class User extends BaseEntity {
   @Column()
   password!: string
 
-  @ManyToOne(() => Role, role => role.user)
-  role!: Role
+  @Column()
+  role!: string
 
   @ManyToOne(() => Bloodcenter, bloodcenter => bloodcenter.user)
   bloodcenter?: Bloodcenter;

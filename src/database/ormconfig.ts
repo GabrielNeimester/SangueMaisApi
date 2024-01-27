@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm'
 import dotenv from 'dotenv'
 import { join } from 'path'
 
+
 dotenv.config() // carrega as variáveis de ambiente do arquivo .env
 
 const dataBase = new DataSource({
@@ -16,7 +17,8 @@ const dataBase = new DataSource({
 
 dataBase.initialize()
   .then(() => {
-    console.log(`Banco de dados inicializado`);
+    console.log(`Banco de dados inicializado`)
+
   })
   .catch((err) => {
     console.error(`Erro ao inicializar o banco de dados`, err);

@@ -6,19 +6,19 @@ import Token from '../models/token.entity'
 
 export default class AuthController {
   static async store (req: Request, res: Response) {
-    const { name, email, password, role, bloodcenter } = req.body
+    const { name, password, role, bloodcenter} = req.body
 
     if (!name) return res.status(400).json({ error: 'O nome é obrigatório' })
-    if (!email) return res.status(400).json({ error: 'O email é obrigatório' })
     if (!password) return res.status(400).json({ error: 'A senha é obrigatória' })
-    if (!role) return res.status(400).json({error: 'A role é obrigatória'})
+    if(!role) return res.status(400).json({erro: 'Nível de acesso é obrigatório'});
+    
 
     const user = new User()
     user.name = name
-    user.role = role
-    user.bloodcenter = bloodcenter
     // Gera a hash da senha com bcrypt - para não salvar a senha em texto puro
     user.password = bcrypt.hashSync(password, 10)
+    user.role = role
+    user.bloodcenter = bloodcenter
     await user.save()
 
     // Não vamos retornar a hash da senha
@@ -33,7 +33,7 @@ export default class AuthController {
   static async login (req: Request, res: Response) {
     const { name, password } = req.body
 
-    if (!name) return res.status(400).json({ error: 'O nome de usuário é obrigatório' })
+    if (!name) return res.status(400).json({ error: 'O nome é obrigatório' })
     if (!password) return res.status(400).json({ error: 'A senha é obrigatória' })
 
     const user = await User.findOneBy({ name })
