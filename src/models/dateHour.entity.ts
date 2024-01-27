@@ -15,6 +15,10 @@ export default class DateHour extends BaseEntity {
 
   @Column()
   spaces!: number
+
+  @Column({name: 'user_id'})
+  userId!: number
+
   
   @ManyToOne(() => User, user => user.date_hour)
   user!: User
