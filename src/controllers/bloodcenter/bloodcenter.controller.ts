@@ -41,7 +41,7 @@ export default class BloodcenterController {
 
           }
           else{
-            return res.status(501).json({ error: 'Acesso não autorizado' });
+            return res.status(403).json({ error: 'Acesso não autorizado' });
           }
     
 
