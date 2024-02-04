@@ -68,6 +68,19 @@ export default class BloodcenterController {
         return res.json(bloodcenter)
       }
 
+      static async showByUserId (req: Request, res: Response) {
+        const { userId } = req.headers
+
+        if (!userId) return res.status(401).json({ error: 'Usuário não autenticado' })
+    
+        const bloodcenter = await Bloodcenter.findOneBy({user: { id: Number(userId) }})
+
+        if(!bloodcenter) res.status(404).json({ error: 'Não existe Hemocentro associado a este usuário' })
+
+        else return res.json(bloodcenter) 
+      }
+
+
     static async update (req: Request, res: Response) {
         const { id } = req.params
         const { cnpj, nome, estado, cidade, bairro, telefone, email } = req.body
@@ -78,7 +91,7 @@ export default class BloodcenterController {
         if (!userId) return res.status(401).json({ error: 'Usuário não autenticado' })
 
         if (!cnpj || !nome || !estado || !cidade || !bairro || !telefone || !email) {
-            return res.status(400).json({ error: 'Todos os campos são obrigatórios' })
+            return res.status(400).json({error: 'Todos os campos são obrigatórios' })
         }
 
         if(!id || isNaN(Number(id))) {
