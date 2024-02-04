@@ -20,8 +20,8 @@ export default class User extends BaseEntity {
   @Column()
   role!: string
 
-  @ManyToOne(() => Bloodcenter, bloodcenter => bloodcenter.user)
-  bloodcenter?: Bloodcenter;
+  @ManyToOne(() => Bloodcenter, bloodcenter => bloodcenter.user, { nullable: true })
+  bloodcenter?: Bloodcenter
 
   @OneToMany(() => Free_Date, free_date => free_date.user)
   free_date!:Free_Date

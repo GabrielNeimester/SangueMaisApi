@@ -8,7 +8,7 @@ const bloodcenterRoutes = Router()
 bloodcenterRoutes.get('/', BloodcenterController.index)
 bloodcenterRoutes.get('/:id', BloodcenterController.show)
 bloodcenterRoutes.post('/', authMiddleware, BloodcenterController.store)
-bloodcenterRoutes.put('/:id', BloodcenterController.update)
+bloodcenterRoutes.put('/:id', authMiddleware,BloodcenterController.update)
 bloodcenterRoutes.delete('/:id', BloodcenterController.delete)
 
 
