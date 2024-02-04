@@ -40,7 +40,8 @@ export default class BloodcenterController {
 
           }
           else{
-            return res.status(401).json({ error: 'Acesso não autorizado' });
+
+            return res.status(403).json({ error: 'Acesso não autorizado' });
           }
     
 
@@ -103,6 +104,7 @@ export default class BloodcenterController {
         return res.json(bloodcenter)
       }
 
+
       static async delete (req: Request, res: Response) {
         const { id } = req.params
 
@@ -119,3 +121,6 @@ export default class BloodcenterController {
         return res.status(204).json()
       }
 }
+
+}
+
