@@ -3,34 +3,72 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import User from '../models/user.entity'
 import Token from '../models/token.entity'
+import Bloodcenter from '../models/bloodcenter.entity'
 
 export default class AuthController {
-  static async store (req: Request, res: Response) {
-    const { name, password, role, bloodcenter} = req.body
+  static async store(req: Request, res: Response) {
+    const { name, password, role, bloodcenterID } = req.body
 
     if (!name) return res.status(400).json({ error: 'O nome é obrigatório' })
     if (!password) return res.status(400).json({ error: 'A senha é obrigatória' })
-    if(!role) return res.status(400).json({erro: 'Nível de acesso é obrigatório'});
+    if (!role) return res.status(400).json({ erro: 'Nível de acesso é obrigatório' })
+
+    const user = await User.findOneBy({name: name})
+
+    if(user) return res.status(400).json({error: 'Nome de usuário já existe'})
+
+    if (role === 'Hemocentro') {
+      const parsedBloodcenterID = Number(bloodcenterID);
+      if (isNaN(parsedBloodcenterID)) {
+        return res.status(400).json({ error: 'ID do hemocentro inválida' });
+      }
+
+      const bloodcenter = await Bloodcenter.findOne({ where: { cod_bloodcenter: parsedBloodcenterID } });
+
+      if (!bloodcenter) {
+        return res.status(400).json({ error: 'Hemocentro não encontrado com a ID fornecida' });
+      }
+
+      const user = new User()
+      user.name = name
+      // Gera a hash da senha com bcrypt - para não salvar a senha em texto puro
+      user.password = bcrypt.hashSync(password, 10)
+      user.role = role
+      user.bloodcenter = bloodcenter
+      await user.save()
+
+      // Não vamos retornar a hash da senha
+      return res.status(201).json({
+        id: user.id,
+        name: user.name,
+        role: user.role,
+        bloodcenter: bloodcenter
+      })
+
+
+    }
     
+    else if(role === 'ADM'){
+      const user = new User()
+      user.name = name
+      // Gera a hash da senha com bcrypt - para não salvar a senha em texto puro
+      user.password = bcrypt.hashSync(password, 10)
+      user.role = role
+      await user.save()
 
-    const user = new User()
-    user.name = name
-    // Gera a hash da senha com bcrypt - para não salvar a senha em texto puro
-    user.password = bcrypt.hashSync(password, 10)
-    user.role = role
-    user.bloodcenter = bloodcenter
-    await user.save()
+      // Não vamos retornar a hash da senha
+      return res.status(201).json({
+        id: user.id,
+        name: user.name,
+        role: user.role
+      })
 
-    // Não vamos retornar a hash da senha
-    return res.status(201).json({
-      id: user.id,
-      name: user.name,
-      role: user.role,
-      bloodcenter: user.bloodcenter
-    })
+
+    }
+    else return res.status(400).json({ erro: 'Nível de acesso é inválido' })
   }
 
-  static async login (req: Request, res: Response) {
+  static async login(req: Request, res: Response) {
     const { name, password } = req.body
 
     if (!name) return res.status(400).json({ error: 'O nome é obrigatório' })
@@ -41,6 +79,7 @@ export default class AuthController {
 
     const passwordMatch = bcrypt.compareSync(password, user.password)
     if (!passwordMatch) return res.status(401).json({ error: 'Senha inválida' })
+
 
     // Remove todos os tokens antigos do usuário
     await Token.delete(
@@ -65,7 +104,7 @@ export default class AuthController {
     })
   }
 
-  static async refresh (req: Request, res: Response) {
+  static async refresh(req: Request, res: Response) {
     const { authorization } = req.headers
 
     if (!authorization) return res.status(400).json({ error: 'O refresh token é obrigatório' })
@@ -92,9 +131,9 @@ export default class AuthController {
     })
   }
 
-  static async logout (req: Request, res: Response) {
+  static async logout(req: Request, res: Response) {
     const { authorization } = req.headers
-    
+
     if (!authorization) return res.status(400).json({ error: 'O token é obrigatório' })
 
     // Verifica se o token existe
