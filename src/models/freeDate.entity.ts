@@ -9,8 +9,8 @@ export default class Free_Date extends BaseEntity {
   @PrimaryGeneratedColumn()
   id_date!: number
 
-  @Column({ type: 'date', unique: true})
-  date!: Date
+  @Column({ unique: true})
+  date!: string
 
   @Column()
   isActive!: boolean

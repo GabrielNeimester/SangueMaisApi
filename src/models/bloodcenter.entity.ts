@@ -34,7 +34,7 @@ export default class Bloodcenter extends BaseEntity {
   @OneToMany(() => User, user => user.bloodcenter)
   user?: User[];
 
-  @OneToMany(() => Free_Date, free_date => free_date.bloodcenter)
+  @OneToMany(() => Free_Date, free_date => free_date.id_date)
   free_date!: Free_Date[]
 
   @OneToMany(()=> Custom_Question, custom_question => custom_question.bloodcenter)
