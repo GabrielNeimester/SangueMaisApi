@@ -32,8 +32,11 @@ export default class DateHourController {
     const freeDate = await Free_Date.findOneBy({ id_date: Number(freeDateId) })
     const user = await User.findOneBy({id: Number(userId)})
 
-    if (!freeDate || !user) res.status(404).json({ error: 'Data associada não encontrada' })
 
+    if (!freeDate || !user) res.status(404).json({ error: 'Data associada não encontrada' })
+    else if(freeDate.isActive===false){
+      return res.status(401).json({ error: 'Data cancelada' })
+    }
     else{
 
        // Verificar se já existe uma hora que sobreponha a nova hora
@@ -55,8 +58,17 @@ export default class DateHourController {
     dateHour.free_date = freeDate
     dateHour.user = user
     dateHour.isActive = true
-    await dateHour.save();
-    return res.json(dateHour)
+    await dateHour.save()
+
+    const responseObject = {
+      id: dateHour.id_date_hour,
+      start_hour: dateHour.start_hour,
+      finish_hour: dateHour.finish_hour,
+      freeDate: dateHour.free_date.id_date,
+      isActive: dateHour.isActive
+    }
+
+    return res.status(201).json(responseObject)
     }
     
 
@@ -107,7 +119,7 @@ export default class DateHourController {
     if (!user) {
       return res.status(404).json({ error: 'Usuário não encontrado' })
     }
-    
+
 
     const freeDate = await Free_Date.findOneBy({dateHour:date_hour })
 
@@ -123,7 +135,15 @@ export default class DateHourController {
     date_hour.isActive = isActive
 
     await date_hour.save();
+    const responseObject = {
+      id: date_hour.id_date_hour,
+      start_hour:  date_hour.start_hour,
+      finish_hour: date_hour.finish_hour,
+      freeDate:  date_hour.free_date.id_date,
+      isActive:  date_hour.isActive
+    }
 
-    return res.json(date_hour)
+    return res.status(201).json(responseObject)
+
   }
 }
