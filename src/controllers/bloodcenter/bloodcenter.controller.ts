@@ -116,19 +116,4 @@ export default class BloodcenterController {
         return res.json(bloodcenter)
       }
 
-      static async delete (req: Request, res: Response) {
-        const { id } = req.params
-
-        if(!id || isNaN(Number(id))) {
-          return res.status(400).json({ error: 'O id é obrigatório' })
-        }
-    
-        const bloodcenter = await Bloodcenter.findOneBy({cod_bloodcenter: Number(id)})
-        if (!bloodcenter) {
-          return res.status(404).json({ error: 'Hemocentro não disponível' })
-        }
-    
-        await bloodcenter.remove()
-        return res.status(204).json()
-      }
 }

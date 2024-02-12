@@ -48,7 +48,7 @@ export default class AuthController {
 
     }
     
-    else if(role === 'ADM'){
+    else if(role === 'Adm'){
       const user = new User()
       user.name = name
       // Gera a hash da senha com bcrypt - para não salvar a senha em texto puro
