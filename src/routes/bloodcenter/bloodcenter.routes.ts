@@ -10,7 +10,6 @@ bloodcenterRoutes.get('/getById/:id', BloodcenterController.show)
 bloodcenterRoutes.get('/getByUser/', authMiddleware, BloodcenterController.showByUserId)
 bloodcenterRoutes.post('/', authMiddleware, BloodcenterController.store)
 bloodcenterRoutes.put('/:id', authMiddleware,BloodcenterController.update)
-bloodcenterRoutes.delete('/:id', BloodcenterController.delete)
 
 
 export default bloodcenterRoutes
