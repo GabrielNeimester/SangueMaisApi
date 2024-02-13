@@ -12,6 +12,9 @@ export default class Question_Option extends BaseEntity {
   @Column()
   impediment! : string
 
+  @Column( { nullable: true })
+  impedimentDays?: number
+
   @ManyToOne(() => Custom_Question, custom_question => custom_question.option)
   custom_question!: Custom_Question
 
