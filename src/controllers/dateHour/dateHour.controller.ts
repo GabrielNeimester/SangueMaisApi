@@ -88,6 +88,18 @@ export default class DateHourController {
     return res.json(date_hour)
   }
 
+  static async indexActive(req: Request, res: Response) {
+    const { id } = req.params
+
+    if (!id || isNaN(Number(id))) {
+      return res.status(400).json({ error: 'O id é obrigatório' })
+    }
+
+    const date_hour = await DateHour.findBy({ free_date: { id_date: Number(id) }, isActive: true })
+
+    return res.json(date_hour)
+  }
+
   static async show(req: Request, res: Response) {
     const { id } = req.params
 

@@ -7,6 +7,7 @@ const dateHourRoutes = Router()
 
 dateHourRoutes.post('/', authMiddleware,DateHourController.store)
 dateHourRoutes.get('/byFreeDate/:id', DateHourController.index)
+dateHourRoutes.get('/activeByFreeDate/:id', DateHourController.indexActive)
 dateHourRoutes.get('/byHour/:id', DateHourController.show)
 dateHourRoutes.put('/:id', authMiddleware, DateHourController.update)
 
