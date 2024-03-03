@@ -81,6 +81,21 @@ export default class FreeDateController {
     else return res.status(404).json({ error: 'Nenhum dado encontrado' })
   }
 
+  static async indexActive (req: Request, res: Response) {
+    const { id } = req.params
+
+    if (!id || isNaN(Number(id))) {
+      return res.status(400).json({ error: 'O id do hemocentro é obrigatório' })
+    }
+
+    const bloodcenter = await Bloodcenter.findOneBy({ cod_bloodcenter: Number(id) })
+    if (bloodcenter) {
+      const free_date = await Free_Date.findBy({ bloodcenter: { cod_bloodcenter: Number(bloodcenter.cod_bloodcenter) }, isActive: true })
+      return res.json(free_date)
+    }
+    else return res.status(404).json({ error: 'Nenhum dado encontrado' })
+  }
+
   static async show(req: Request, res: Response) {
     const { id } = req.params
 
