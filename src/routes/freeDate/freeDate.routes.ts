@@ -6,6 +6,7 @@ const freeDateRoutes = Router()
 
 freeDateRoutes.post('/', authMiddleware,FreeDateController.store)
 freeDateRoutes.get('/byBloodcenter/:id', FreeDateController.index)
+freeDateRoutes.get('/activeByBloodcenter/:id', FreeDateController.indexActive)
 freeDateRoutes.get('/byDateId/:id', FreeDateController.show)
 freeDateRoutes.put('/:id', authMiddleware, FreeDateController.update)
 
